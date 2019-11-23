@@ -1,0 +1,27 @@
+package com.cucumber.stepdefinitions;
+
+import java.util.HashMap;
+import java.util.List;
+
+import com.cucumber.framework.PageObject;
+import com.cucumber.framework.helpers.ExecutionHelper;
+
+import cucumber.api.Scenario;
+import cucumber.api.java.Before;
+
+
+
+public class Hooks extends PageObject  {
+	
+	public List<HashMap<String,String>> datamap;
+	
+	
+    @Before
+    public void beforeScenario(Scenario scenario) throws Throwable {
+    
+    	
+    }
+   
+    
+}
+

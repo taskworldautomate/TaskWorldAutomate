@@ -1,0 +1,6 @@
+url=https://enterprise.taskworld.com/login
+browser=chrome
+
+driver.root.dir=tools\\chromedriver\\win32\\chromedriver.exe
+
+

@@ -1,0 +1,1657 @@
+package com.cucumber.stepdefinitions;
+
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.openqa.selenium.By;
+
+import com.cucumber.framework.helpers.ExecutionHelper;
+import com.cucumber.framework.helpers.LocalDriverManager;
+import com.cucumber.framework.helpers.WebDriverHelp;
+import com.cucumber.framework.helpers.utils.Utils;
+import com.cucumber.page_objects.SleepCountryLandingPage;
+import com.relevantcodes.extentreports.LogStatus;
+
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import net.bytebuddy.asm.Advice.Local;
+
+public class TaskWorldHomePageSteps {
+
+	private static final Logger LOG = LoggerFactory.getLogger(TaskWorldHomePageSteps.class);
+
+	SleepCountryLandingPage sleepcountryhomepage = new SleepCountryLandingPage();
+
+	Utils utility = new Utils();
+	WebDriverWait wait = new WebDriverWait(LocalDriverManager.getDriver(), 120);
+	Actions action = new Actions(LocalDriverManager.getDriver());
+
+	public String submenuText, currentURL, finalURL;
+	public int constURLlength, endindex;
+
+	// Create Account Details
+	public String FN = "Test1";
+	public String LN = "Account";
+	public String Email = "test3account@gmail.com";
+	public String Password = "Password1";
+	public String SMScheckbox = "Yes";
+
+	// Edit Account Details
+	public String EditFN = "EditTest1";
+	public String EditLN = "EditLastN";
+	public String EditEmail = "test1account@gmail.com";
+	public String EditPassword = "Password1";
+	public String EditSMScheckbox = "Yes";
+	public String EditMailCheckbox = "Yes";
+
+	// Search results
+	public int NoOfProducts;
+
+	public List<WebElement> megamenuitems;
+	public List<WebElement> submenuitems;
+
+	Actions actions = new Actions(LocalDriverManager.getDriver());
+
+	@Given("^I Login as existing user")
+	public void ILoginAsExistingUser() throws InterruptedException {
+		try {
+
+			WebDriverHelp.startAtHomePage();
+			WebDriverWait wait = new WebDriverWait(LocalDriverManager.getDriver(), 200);
+			wait.until(ExpectedConditions.elementToBeClickable(sleepcountryhomepage.megaMenu));
+
+			wait.until(ExpectedConditions.elementToBeClickable(sleepcountryhomepage.LoginLink));
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.LoginLink).click();
+
+			wait.until(ExpectedConditions.elementToBeClickable(sleepcountryhomepage.EmailID));
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.EmailID)
+					.sendKeys(sleepcountryhomepage.Username);
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Exception occurred while navigating to Home Page");
+			Thread.sleep(3000);
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.Password)
+					.sendKeys(sleepcountryhomepage.Pwd);
+			Thread.sleep(2000);
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.LoginButton).click();
+
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.LoginLink).click();
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.MyAccountLinkAfterLogin));
+			Assert.assertTrue("My Account is not visible or login was not successfull", LocalDriverManager.getDriver()
+					.findElement(sleepcountryhomepage.MyAccountLinkAfterLogin).isDisplayed());
+
+			// wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.LoggedInWelcomeRibbon));
+			// List<WebElement> WelcomeRibbon = LocalDriverManager.getDriver()
+			// .findElements(sleepcountryhomepage.LoggedInWelcomeRibbon);
+			//
+			// Assert.assertTrue(WelcomeRibbon.get(0).getText().contains("Hello"));
+			// System.out.println("Hello text is present : " +
+			// WelcomeRibbon.get(0).getText());
+			// Assert.assertEquals("My Account", WelcomeRibbon.get(1).getText());
+			// System.out.println("My Account link is present");
+			// Assert.assertEquals("Log Out", WelcomeRibbon.get(2).getText());
+			// System.out.println("Log Out link is present");
+			// Assert.assertEquals("Wish List", WelcomeRibbon.get(3).getText());
+			System.out.println("Log Out link is present");
+			System.out.println("LOGIN SUCCESS!!");
+
+			// Home Page validations
+			// Navigate to another page and then come back to Home page by clicking on the
+			// Sleep Country Image
+			List<WebElement> Menu = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+			Menu.get(0).click();
+			Thread.sleep(5000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.SleepCountryImage));
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.SleepCountryImage).click();
+			Thread.sleep(3000);
+			int beginIndex = sleepcountryhomepage.URL.length();
+			String CurrentURL = LocalDriverManager.getDriver().getCurrentUrl();
+			String finalURL = CurrentURL.substring(beginIndex);
+			Assert.assertTrue(finalURL.contains("home"));
+			System.out.println("Home Page is displayed");
+
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I click to navigate to other page")
+	public void IClickToNavigateToOtherPage() throws InterruptedException {
+		try {
+			Thread.sleep(5000);
+			wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(sleepcountryhomepage.megaMenu));
+			List<WebElement> menu = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+			Utils.clickOnWebElement(menu.get(0), LocalDriverManager.getDriver());
+			Thread.sleep(5000);
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Navigated to another page in the Site");
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I click on the SleepCountry Image")
+	public void IClickOnSleepCountryImage() throws InterruptedException {
+		try {
+			// User clicks on the Sleep Country Image to navigate to the Home Page
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.SleepCountryImage));
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.SleepCountryImage).click();
+			Thread.sleep(3000);
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Clicked on the Sleep Country Image");
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@Then("^I must see the Home Page loaded")
+	public void IMustSeeHomePageLoaded() throws InterruptedException {
+		try {
+			// Validating that User is successfully navigated to Home page using the URL
+			int beginIndex = sleepcountryhomepage.URL.length();
+			String CurrentURL = LocalDriverManager.getDriver().getCurrentUrl();
+			String finalURL = CurrentURL.substring(beginIndex);
+			Assert.assertTrue(finalURL.contains("home"));
+			System.out.println("Home Page is displayed");
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "User is navigated to the Home Page successfully");
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@Given("^I launch the Sleep Country Application")
+	public void ILaunchTheSleepCountryApp() throws InterruptedException {
+		try {
+			// Launching the Sleep Country Application
+			WebDriverHelp.startAtHomePage();
+			wait.until(ExpectedConditions.elementToBeClickable(sleepcountryhomepage.LoginLink));
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Sleep Country URL is launched");
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@Given("^I click on the Login button on Home page")
+	public void IClickOnLogin() throws InterruptedException {
+		try {
+			Thread.sleep(2000);
+			wait.until(ExpectedConditions.elementToBeClickable(sleepcountryhomepage.LoginLink));
+			Thread.sleep(10000);
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.LoginLink).click();
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Clicked on the Login link on Home page");
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I enter the \"(.*)\" and \"(.*)\"")
+	public void IEnterUsernameAndPassword(String Username, String password) throws InterruptedException {
+		try {
+			Thread.sleep(2000);
+			wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(sleepcountryhomepage.EmailID));
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.EmailID).sendKeys(Username);
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Entered the user name");
+			Thread.sleep(3000);
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.Password).sendKeys(password);
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Entered the password");
+			Thread.sleep(2000);
+
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I click on SignIn Button")
+	public void IClickOnSignInBtn() throws InterruptedException {
+		try {
+
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.LoginButton).click();
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Clicked on the Login/SignIn button");
+			Thread.sleep(5000);
+			LocalDriverManager.getDriver().navigate().refresh();
+
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@Then("^I am logged into the Sleep Country Application successfully")
+	public void ILoggedInSuccessfully() throws InterruptedException {
+		try {
+			Thread.sleep(10000);
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.LoginLink).click();
+			Thread.sleep(2000);
+			//wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.MyAccountLinkAfterLogin));
+			Assert.assertTrue("My Account is not visible or login was not successfull", LocalDriverManager.getDriver()
+					.findElement(sleepcountryhomepage.MyAccountLinkAfterLogin).isDisplayed());
+			System.out.println("LOGIN SUCCESS!!");
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "LOGIN Was Successfully completed");
+
+			// LocalDriverManager.getDriver().findElement(sleepcountryhomepage.MyAccountLinkAfterLogin).click();
+
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@Given("^I enter Search text as \"(.*)\"")
+	public void IEnterSearchCriteria(String searchKeyword) throws InterruptedException {
+		try {
+			//String searchKeyword = "pillow";
+			Thread.sleep(10000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.SearchOnHeader));
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.SearchOnHeader).click();
+			wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(sleepcountryhomepage.SearchBar));
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.SearchBar).sendKeys(searchKeyword);
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Search text is entered as :" + searchKeyword);
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I click on Search button")
+	public void IClickOnSearchButton() throws InterruptedException {
+		try {
+			Thread.sleep(3000);
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.SearchButton).click();
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Search Button is clicked");
+
+			Thread.sleep(20000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.SearchResultsSection));
+
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Search Results section is visible");
+
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@Then("^I must see the Search results displayed with \"(.*)\"")
+	public void IMustSeeSearchResults(String res) throws InterruptedException {
+		try {
+			Thread.sleep(10000);
+			wait.until(ExpectedConditions
+					.visibilityOf(LocalDriverManager.getDriver().findElement(sleepcountryhomepage.SearchResultsText)));
+			String searchtextOnUI = LocalDriverManager.getDriver().findElement(sleepcountryhomepage.SearchResultsText)
+					.getText();
+			String searchResultsURL = LocalDriverManager.getDriver().getCurrentUrl();
+			Assert.assertTrue("Search Results Page not loaded", searchResultsURL.contains("searchresults?"));
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "URL contains searchresults? text");
+			System.out.println("Search Results Page got loaded");
+			Assert.assertTrue("Search was not successfull", searchtextOnUI.contains(res));
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Search Text in results section contains" +res);
+			System.out.println("Search Text Present");
+			Assert.assertTrue("Compare button is not displayed", LocalDriverManager.getDriver()
+					.findElement(sleepcountryhomepage.SearchResultsCompareBtn).isDisplayed());
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Search Results compare button is visible");
+			System.out.println("Compare button Present");
+			Assert.assertTrue("Sorting Dropdown is not displayed",
+					LocalDriverManager.getDriver().findElement(sleepcountryhomepage.SearchResultsSortDD).isDisplayed());
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Search Results section sroting dropdown is visible");
+			System.out.println("Sorting Dropdown Present");
+			Assert.assertTrue("Search Results Section not displayed", LocalDriverManager.getDriver()
+					.findElement(sleepcountryhomepage.SearchResultsSection).isDisplayed());
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Search Results section is visible with data");
+			System.out.println("Search Results Section Present");
+			Assert.assertTrue("Search Results are not displayed",
+					LocalDriverManager.getDriver().findElement(sleepcountryhomepage.SearchResults).isDisplayed());
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Products are visible in Search Results");
+			System.out.println("Search Results Present");
+			Assert.assertTrue("Search Results Filter Pane not present", LocalDriverManager.getDriver()
+					.findElement(sleepcountryhomepage.SearchResultsFilterPane).isDisplayed());
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Search performed is successfull");
+			System.out.println("SEARCH SUCCESS !!!");
+
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I select the \"(.*)\" megamenu")
+	public void ISelectMegaMenu(String menuitem) throws InterruptedException {
+		try {
+			Thread.sleep(10000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.megaMenu));
+			List<WebElement> megamenu = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+			constURLlength = sleepcountryhomepage.URL.length();
+			Actions actions = new Actions(LocalDriverManager.getDriver());
+
+			actions.moveToElement(megamenu.get(0)).perform();
+			Thread.sleep(10000);
+		}
+
+		catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	public void validateNavigationURL(int submenuitemss, int megam, By subMenu) throws InterruptedException {
+
+		megamenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+		actions.moveToElement(megamenuitems.get(megam)).perform();
+		Thread.sleep(5000);
+		submenuitems = LocalDriverManager.getDriver().findElements(subMenu);
+		submenuText = submenuitems.get(submenuitemss).getText().toLowerCase();
+		Thread.sleep(3000);
+		actions.moveToElement(submenuitems.get(submenuitemss)).perform();
+		Thread.sleep(2000);
+		submenuitems.get(submenuitemss).click();
+		Thread.sleep(10000);
+		submenuText = StringUtils.deleteWhitespace(submenuText);
+		currentURL = LocalDriverManager.getDriver().getCurrentUrl();
+		currentURL = currentURL.substring(constURLlength + 1);
+		currentURL = currentURL.replace("-", "");
+		endindex = currentURL.indexOf("/");
+		finalURL = currentURL.substring(0, endindex);
+		Assert.assertTrue("User did not navigate successfully", finalURL.equalsIgnoreCase(submenuText));
+		ExecutionHelper.getLogger().log(LogStatus.PASS, "Navigating to " + submenuText);
+		System.out.println("submenutext:" + submenuText);
+		ExecutionHelper.getLogger().log(LogStatus.PASS, "The URL Post Navigation contains:" + finalURL);
+		System.out.println("finalURL:" + finalURL);
+
+	}
+
+	@Then("^I must be able to navigate to \"(.*)\" Submenu of \"(.*)\" megamenu")
+	public void IMustBeAbletoNavigate(String submenu, String megamenu) throws InterruptedException {
+		try {
+
+			switch (megamenu) {
+			case "Mattresses":
+				switch (submenu) {
+				case "By Brand":
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.megaMenu));
+					megamenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+					actions.moveToElement(megamenuitems.get(0)).perform();
+					Thread.sleep(10000);
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.SubMenuByBrand));
+					submenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.SubMenuByBrand);
+					for (int i = 0; i < submenuitems.size(); i++) {
+						validateNavigationURL(i, 0, sleepcountryhomepage.SubMenuByBrand);
+					}
+					break;
+				case "By Top":
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.megaMenu));
+					megamenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+					constURLlength = sleepcountryhomepage.URL.length();
+					actions.moveToElement(megamenuitems.get(0)).perform();
+					Thread.sleep(10000);
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.SubMenuByTop));
+					submenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.SubMenuByTop);
+					for (int i = 0; i < submenuitems.size(); i++) {
+						validateNavigationURL(i, 0, sleepcountryhomepage.SubMenuByTop);
+					}
+					break;
+				case "By Type":
+
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.megaMenu));
+					megamenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+					constURLlength = sleepcountryhomepage.URL.length();
+					actions.moveToElement(megamenuitems.get(0)).perform();
+					Thread.sleep(10000);
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.SubMenuByType));
+					submenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.SubMenuByType);
+					for (int i = 0; i < submenuitems.size(); i++) {
+						validateNavigationURL(i, 0, sleepcountryhomepage.SubMenuByType);
+					}
+
+				case "Speciality":
+
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.megaMenu));
+					megamenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+					constURLlength = sleepcountryhomepage.URL.length();
+					actions.moveToElement(megamenuitems.get(0)).perform();
+					Thread.sleep(10000);
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.SubMenuBySpeciality));
+					submenuitems = LocalDriverManager.getDriver()
+							.findElements(sleepcountryhomepage.SubMenuBySpeciality);
+					for (int i = 0; i < submenuitems.size(); i++) {
+						validateNavigationURL(i, 0, sleepcountryhomepage.SubMenuBySpeciality);
+					}
+
+					break;
+				}
+
+			case "Bloom":
+				switch (submenu) {
+				case "Mattress Collection":
+
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.megaMenu));
+					megamenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+					constURLlength = sleepcountryhomepage.URL.length();
+					actions.moveToElement(megamenuitems.get(1)).perform();
+					Thread.sleep(10000);
+					wait.until(ExpectedConditions
+							.visibilityOfElementLocated(sleepcountryhomepage.SubMenuByMattressCollection));
+					submenuitems = LocalDriverManager.getDriver()
+							.findElements(sleepcountryhomepage.SubMenuByMattressCollection);
+					for (int i = 0; i < submenuitems.size(); i++) {
+						validateNavigationURL(i, 1, sleepcountryhomepage.SubMenuByMattressCollection);
+					}
+					break;
+
+				case "Product Collection":
+
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.megaMenu));
+					megamenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+					constURLlength = sleepcountryhomepage.URL.length();
+					actions.moveToElement(megamenuitems.get(1)).perform();
+					Thread.sleep(10000);
+					wait.until(ExpectedConditions
+							.visibilityOfElementLocated(sleepcountryhomepage.SubMenuByProductCollection));
+					submenuitems = LocalDriverManager.getDriver()
+							.findElements(sleepcountryhomepage.SubMenuByProductCollection);
+					for (int i = 0; i < submenuitems.size(); i++) {
+						validateNavigationURL(i, 1, sleepcountryhomepage.SubMenuByProductCollection);
+					}
+					break;
+
+				case "The Ploom Pillow":
+
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.megaMenu));
+					megamenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+					constURLlength = sleepcountryhomepage.URL.length();
+					actions.moveToElement(megamenuitems.get(1)).perform();
+					Thread.sleep(10000);
+					wait.until(ExpectedConditions
+							.visibilityOfElementLocated(sleepcountryhomepage.SubMenuByThePloomPillow));
+					submenuitems = LocalDriverManager.getDriver()
+							.findElements(sleepcountryhomepage.SubMenuByThePloomPillow);
+					for (int i = 0; i < submenuitems.size(); i++) {
+						validateNavigationURL(i, 1, sleepcountryhomepage.SubMenuByThePloomPillow);
+					}
+					break;
+
+				}
+				break;
+			case "Pillows":
+				switch (submenu) {
+				case "Bloom":
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.megaMenu));
+					megamenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+					actions.moveToElement(megamenuitems.get(2)).perform();
+					Thread.sleep(10000);
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.SubMenuBloom));
+					submenuitems = LocalDriverManager.getDriver()
+							.findElements(sleepcountryhomepage.SubMenuBloom);
+					for (int i = 0; i < submenuitems.size(); i++) {
+						validateNavigationURL(i, 2, sleepcountryhomepage.SubMenuBloom);
+					}
+					break;
+				case "By Sleeper Type":
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.megaMenu));
+					megamenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+					actions.moveToElement(megamenuitems.get(2)).perform();
+					Thread.sleep(10000);
+					wait.until(
+							ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.SubMenuBySleeperType));
+					submenuitems = LocalDriverManager.getDriver()
+							.findElements(sleepcountryhomepage.SubMenuBySleeperType);
+					for (int i = 0; i < submenuitems.size(); i++) {
+						validateNavigationURL(i, 2, sleepcountryhomepage.SubMenuBySleeperType);
+					}
+					break;
+				case "By Type":
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.megaMenu));
+					megamenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+					actions.moveToElement(megamenuitems.get(2)).perform();
+					Thread.sleep(10000);
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.SubMenuPillowByType));
+					submenuitems = LocalDriverManager.getDriver()
+							.findElements(sleepcountryhomepage.SubMenuPillowByType);
+					for (int i = 0; i < submenuitems.size(); i++) {
+						validateNavigationURL(i, 2, sleepcountryhomepage.SubMenuPillowByType);
+					}
+					break;
+				}
+			case "Furniture":
+				switch (submenu) {
+				case "Throws":
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.megaMenu));
+					megamenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+					constURLlength = sleepcountryhomepage.URL.length();
+					actions.moveToElement(megamenuitems.get(3)).perform();
+					Thread.sleep(10000);
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.SubMenuThrows));
+					submenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.SubMenuThrows);
+					for (int i = 0; i < submenuitems.size(); i++) {
+						validateNavigationURL(i, 3, sleepcountryhomepage.SubMenuThrows);
+					}
+					break;
+				case "Sleep Essentials":
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.megaMenu));
+					megamenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+					constURLlength = sleepcountryhomepage.URL.length();
+					actions.moveToElement(megamenuitems.get(3)).perform();
+					Thread.sleep(10000);
+					wait.until(
+							ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.SubMenuSleepEssentials));
+					submenuitems = LocalDriverManager.getDriver()
+							.findElements(sleepcountryhomepage.SubMenuSleepEssentials);
+					for (int i = 0; i < submenuitems.size(); i++) {
+						validateNavigationURL(i, 3, sleepcountryhomepage.SubMenuSleepEssentials);
+					}
+					break;
+				}
+				break;
+			case "Bedding":
+				switch (submenu) {
+				case "Mattresses":
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.megaMenu));
+					megamenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+					actions.moveToElement(megamenuitems.get(4)).perform();
+					Thread.sleep(10000);
+					wait.until(ExpectedConditions
+							.visibilityOfElementLocated(sleepcountryhomepage.SubMenuSpecialOffersMattresses));
+					submenuitems = LocalDriverManager.getDriver()
+							.findElements(sleepcountryhomepage.SubMenuSpecialOffersMattresses);
+					for (int i = 0; i < submenuitems.size(); i++) {
+						validateNavigationURL(i, 4, sleepcountryhomepage.SubMenuSpecialOffersMattresses);
+					}
+					break;
+				case "Sleep Accessories":
+					wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.megaMenu));
+					megamenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+					actions.moveToElement(megamenuitems.get(4)).perform();
+					Thread.sleep(10000);
+					wait.until(ExpectedConditions
+							.visibilityOfElementLocated(sleepcountryhomepage.SubMenuSpecialOffersSleepAcc));
+					submenuitems = LocalDriverManager.getDriver()
+							.findElements(sleepcountryhomepage.SubMenuSpecialOffersSleepAcc);
+					for (int i = 0; i < submenuitems.size(); i++) {
+						validateNavigationURL(i, 4, sleepcountryhomepage.SubMenuSpecialOffersSleepAcc);
+					}
+					break;
+				}
+				break;
+			case "Specials":
+				wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.megaMenu));
+				megamenuitems = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+				megamenuitems.get(5).click();
+				Thread.sleep(5000);
+				submenuText = StringUtils.deleteWhitespace(megamenuitems.get(5).getText());
+				currentURL = LocalDriverManager.getDriver().getCurrentUrl();
+				currentURL = currentURL.substring(constURLlength + 1);
+				currentURL = currentURL.replace("-", "");
+				endindex = currentURL.indexOf("/");
+				finalURL = currentURL.substring(0, endindex);
+				Assert.assertTrue("User did not navigate successfully", finalURL.equalsIgnoreCase(submenuText));
+				ExecutionHelper.getLogger().log(LogStatus.PASS, "Navigating to " + submenuText);
+				System.out.println("submenutext:" + submenuText);
+				ExecutionHelper.getLogger().log(LogStatus.PASS, "The URL Post Navigation contains:" + finalURL);
+				System.out.println("finalURL:" + finalURL);
+				break;
+			default:
+				break;
+
+			}
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while performing category navigation");
+		}
+	}
+
+	@When("^I navigate to Comfort Top page")
+	public void INavigateToComfortTopPage() throws InterruptedException {
+		try {
+			Thread.sleep(20000);
+			
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.megaMenu));
+			List<WebElement> megamenu = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+
+			// Navigation to one Product Page
+
+			constURLlength = sleepcountryhomepage.URL.length();
+			Actions actions = new Actions(LocalDriverManager.getDriver());
+
+			actions.moveToElement(megamenu.get(0)).perform();
+			Thread.sleep(5000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.SubMenuByTop));
+			List<WebElement> submenuMatress = LocalDriverManager.getDriver()
+					.findElements(sleepcountryhomepage.SubMenuByTop);
+
+			actions.moveToElement(submenuMatress.get(0)).perform();
+			submenuText = submenuMatress.get(0).getText().toLowerCase();
+			
+			submenuMatress.get(0).click();
+			
+			Thread.sleep(5000);
+
+			submenuText = StringUtils.deleteWhitespace(submenuText);
+			currentURL = LocalDriverManager.getDriver().getCurrentUrl();
+			currentURL = currentURL.substring(constURLlength + 1);
+			currentURL = currentURL.replace("-", "");
+			int endindex = currentURL.indexOf("/");
+			String finalURL = currentURL.substring(0, endindex);
+			Assert.assertTrue("Page navigation to the Product Listing Page Failed",
+					finalURL.equalsIgnoreCase(submenuText));
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Navigated to Comfort Top Page");
+			System.out.println("Navigated successfully to Comfort Top");
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while performing category navigation");
+		}
+	}
+
+	
+	
+	@When("^I navigate to beauty rest page")
+	public void INavigateToBeautyRestPage() throws InterruptedException {
+		try {
+			// LocalDriverManager.getDriver().get("https://admin:admin@ccstore-stage-zeka.oracleoutsourcing.com/mattresses/category/MattressesCollectionID");
+			Thread.sleep(20000);
+			
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.megaMenu));
+			List<WebElement> megamenu = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.megaMenu);
+
+			// Navigation to one Product Page
+
+			constURLlength = sleepcountryhomepage.URL.length();
+			Actions actions = new Actions(LocalDriverManager.getDriver());
+
+			actions.moveToElement(megamenu.get(0)).perform();
+			Thread.sleep(5000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.SubMenuByBrand));
+			List<WebElement> submenuMatress = LocalDriverManager.getDriver()
+					.findElements(sleepcountryhomepage.SubMenuByBrand);
+
+			actions.moveToElement(submenuMatress.get(0)).perform();
+			submenuText = submenuMatress.get(0).getText().toLowerCase();
+			
+			submenuMatress.get(0).click();
+			
+			Thread.sleep(10000);
+
+			submenuText = StringUtils.deleteWhitespace(submenuText);
+			currentURL = LocalDriverManager.getDriver().getCurrentUrl();
+			currentURL = currentURL.substring(constURLlength + 1);
+			currentURL = currentURL.replace("-", "");
+			int endindex = currentURL.indexOf("/");
+			String finalURL = currentURL.substring(0, endindex);
+			Assert.assertTrue("Page navigation to the Product Listing Page Failed",
+					finalURL.equalsIgnoreCase(submenuText));
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Navigated to Beauty Rest Page");
+			System.out.println("Navigated successfully to Beauty Rest");
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while performing category navigation");
+		}
+	}
+
+	@When("^I apply a filter on the page")
+	public void IApplyFilterOnPLPPage() throws InterruptedException {
+		try {
+			String ProductNotext = LocalDriverManager.getDriver()
+					.findElement(sleepcountryhomepage.ProductResultsOnSearch).getText();
+			int endIndex = ProductNotext.indexOf(" ");
+			NoOfProducts = Integer.parseInt(ProductNotext.substring(0, endIndex));
+
+			Thread.sleep(2000);
+			List<WebElement> filterbyCB = LocalDriverManager.getDriver()
+					.findElements(sleepcountryhomepage.FilterCheckboxes);
+			wait.until(ExpectedConditions.visibilityOfAllElements(filterbyCB));
+			filterbyCB.get(1).click();
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Clicked on a filter checkbox to filter the results");
+			Thread.sleep(10000);
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while performing application of a filter");
+		}
+	}
+
+	@Then("^I must see the desired filtered results")
+	public void IMustSeeFilteredResults() throws InterruptedException {
+		try {
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.ProductResultsOnSearch));
+			String ProductsAfterFilter = LocalDriverManager.getDriver()
+					.findElement(sleepcountryhomepage.ProductResultsOnSearch).getText();
+			int endIndex = ProductsAfterFilter.indexOf(" ");
+			int NoOfProdsAfterFilter = Integer.parseInt(ProductsAfterFilter.substring(0, endIndex));
+			Assert.assertTrue("Expected " + NoOfProducts + " should be greater than Actual " + NoOfProdsAfterFilter,
+					NoOfProducts > NoOfProdsAfterFilter);
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Expected " + NoOfProducts
+					+ " before filter is greater than Actual after applying the filter" + NoOfProdsAfterFilter);
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Filter applied on Searched results is successfull");
+
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while performing filtered results validations");
+		}
+	}
+
+	@Then("^I am able to view the Product Listing Page")
+	public void IViewProductListingPage() throws InterruptedException {
+		try {
+			// Navigating to Beauty rest page
+			INavigateToBeautyRestPage();
+
+			// Validating the Product Listing Page
+			Thread.sleep(3000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.ProductListingPageHeader));
+			Assert.assertTrue("Product Listing Page header incorrect or not loaded",
+					LocalDriverManager.getDriver().findElement(sleepcountryhomepage.ProductListingPageHeader).getText()
+							.equalsIgnoreCase("Beautyrest"));
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Beauty Rest Header displayed");
+			System.out.println("Product Listing Header displayed");
+			Assert.assertTrue("Product Listing Compare Button not displayed", LocalDriverManager.getDriver()
+					.findElement(sleepcountryhomepage.ProductListingCompareBtn).isDisplayed());
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Product Listing Compare button is displayed");
+			System.out.println("Product Listing Compare button is displayed");
+			Assert.assertTrue("Product Listing Sort Dropdown not displayed", LocalDriverManager.getDriver()
+					.findElement(sleepcountryhomepage.ProductListingSortDD).isDisplayed());
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Product Listing Dropdown is displayed");
+			System.out.println("Product Listing page Sorting Dropdown is displayed");
+			Assert.assertTrue("Product Listing Filter Section is not displayed", LocalDriverManager.getDriver()
+					.findElement(sleepcountryhomepage.ProductListingFilterSection).isDisplayed());
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Product Listing Filter section visible");
+			System.out.println("Product Listing Filter Section is displayed");
+			Assert.assertTrue("Product Listing Section not displayed", LocalDriverManager.getDriver()
+					.findElement(sleepcountryhomepage.ProductListingSection).isDisplayed());
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Products of Beauty Rest are listed");
+			System.out.println("Product Listing Section is displayed with the products available");
+
+			// Product Count from the # products text below header
+			String ProductCount = LocalDriverManager.getDriver()
+					.findElement(sleepcountryhomepage.ProductListingResultText).getText();
+			ProductCount = ProductCount.substring(0, ProductCount.indexOf(" "));
+			int ProdCountFromText = Integer.parseInt(ProductCount);
+			// Getting the total products into a List
+			List<WebElement> Prod = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.Products);
+			int ProdResultsCount = Prod.size();
+			Assert.assertTrue("Product Count not matching", ProdCountFromText == ProdResultsCount);
+			ExecutionHelper.getLogger().log(LogStatus.PASS,
+					"Number of beauty rest products displayed are:" + ProdResultsCount);
+			System.out.println("Product Count in Product Listing and Count mentioned in the Header match");
+
+			// Product Name below the Image
+			String ProdNamValue;
+
+			List<WebElement> ProdName = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.ProductNames);
+			for (WebElement e : ProdName) {
+				ProdNamValue = e.getText();
+				Assert.assertTrue("Value does not contain the Product name Beautyrest for Product:" + ProdNamValue,
+						ProdNamValue.contains("Beautyrest"));
+				ExecutionHelper.getLogger().log(LogStatus.PASS, "Product Description:" + ProdNamValue);
+				System.out.println("Product Description contains the Product name Beautyrest");
+			}
+			System.out.println("PLP Validation SUCCESS!");
+
+			ExecutionHelper.getLogger().log(LogStatus.PASS,
+					"Product Listing Page is visible with the required results");
+
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@Given("^I am able to click on create a new account")
+	public void IAmAbleToCreateAnAccount() throws InterruptedException
+
+	{
+		try {
+			Thread.sleep(10000);
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.LoginLink).click();
+			wait.until(ExpectedConditions.elementToBeClickable(sleepcountryhomepage.createAccount));
+			Thread.sleep(3000);
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.createAccount).click();
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Clicked on Create Account Link");
+			Thread.sleep(5000);
+
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I Enter \"(.*)\" as \"(.*)\"")
+	public void IEnterDetailsInCreateAccount(String field, String value) throws InterruptedException {
+		try {
+			// creating account
+
+			if (field.equalsIgnoreCase("first name") && !(value == null)) {
+				wait.until(ExpectedConditions.elementToBeClickable(sleepcountryhomepage.createAccountFN));
+				LocalDriverManager.getDriver().findElement(sleepcountryhomepage.createAccountFN).clear();
+				LocalDriverManager.getDriver().findElement(sleepcountryhomepage.createAccountFN).sendKeys(value);
+				ExecutionHelper.getLogger().log(LogStatus.PASS, "Entered the First Name");
+				System.out.println("FN entered");
+				Thread.sleep(5000);
+
+			}
+
+			if (field.equalsIgnoreCase("last name") && !(value == null)) {
+				wait.until(ExpectedConditions.elementToBeClickable(sleepcountryhomepage.createAccountLN));
+				LocalDriverManager.getDriver().findElement(sleepcountryhomepage.createAccountLN).sendKeys(value);
+				ExecutionHelper.getLogger().log(LogStatus.PASS, "Entered the Last Name");
+				System.out.println("LN entered");
+				Thread.sleep(5000);
+			}
+
+			if (field.equalsIgnoreCase("email") && !(value == null)) {
+				wait.until(ExpectedConditions.elementToBeClickable(sleepcountryhomepage.createAccountEmail));
+				LocalDriverManager.getDriver().findElement(sleepcountryhomepage.createAccountEmail).sendKeys(value);
+				ExecutionHelper.getLogger().log(LogStatus.PASS, "Entered the Email Address");
+				System.out.println("Email entered");
+				Thread.sleep(2000);
+			}
+
+			if (field.equalsIgnoreCase("password") && !(value == null)) {
+				wait.until(ExpectedConditions.elementToBeClickable(sleepcountryhomepage.createAccountPassword));
+
+				LocalDriverManager.getDriver().findElement(sleepcountryhomepage.createAccountPassword).sendKeys(value);
+				ExecutionHelper.getLogger().log(LogStatus.PASS, "Entered the Password");
+				System.out.println("Password entered");
+				Thread.sleep(2000);
+				LocalDriverManager.getDriver().findElement(sleepcountryhomepage.createAccountConfirmPass)
+						.sendKeys(value);
+				ExecutionHelper.getLogger().log(LogStatus.PASS, "Entered the Confirm Password");
+				System.out.println("Confirm password entered");
+				Thread.sleep(2000);
+			}
+
+			if (field.equalsIgnoreCase("checkbox") && (value.equalsIgnoreCase("Yes"))) {
+				Thread.sleep(2000);
+				actions.moveToElement(
+						LocalDriverManager.getDriver().findElement(sleepcountryhomepage.createAccountcheckbox))
+						.perform();
+				wait.until(ExpectedConditions.elementToBeClickable(sleepcountryhomepage.createAccountcheckbox));
+				LocalDriverManager.getDriver().findElement(sleepcountryhomepage.createAccountcheckbox).click();
+				ExecutionHelper.getLogger().log(LogStatus.PASS,
+						"Clicked the CheckBox Yes I'd like to receive news, offers from Sleep Country");
+				Thread.sleep(4000);
+				System.out.println("Checkbox clicked");
+			}
+
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I click on create Account button")
+	public void IClickCreateAccount() throws InterruptedException {
+		try {
+
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.createAccountButton).click();
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Create Account button is clicked");
+			System.out.println("Create button clicked");
+
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@Then("^I validate that I am Logged in after account creation successfully")
+	public void IValidateAccountCreation() throws InterruptedException {
+		try {
+			Thread.sleep(10000);
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.LoginLink).click();
+			Thread.sleep(2000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.MyAccountLinkAfterLogin));
+			Assert.assertTrue("My Account is not visible or login was not successfull", LocalDriverManager.getDriver()
+					.findElement(sleepcountryhomepage.MyAccountLinkAfterLogin).isDisplayed());
+			System.out.println("Account Creation and LOGIN SUCCESS!!");
+			ExecutionHelper.getLogger().log(LogStatus.PASS,
+					"Account creation Was Successfully completed and User is logged in");
+
+			// Wait<WebDriver> wait = new WebDriverWait(LocalDriverManager.getDriver(), 30);
+			// String AccName =
+			// wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.accountName))
+			// .getText();
+			// Assert.assertTrue(AccName.equalsIgnoreCase("Hello" + " " + FN));
+			// ExecutionHelper.getLogger().log(LogStatus.PASS, "User Account is created and
+			// logged in");
+			// ExecutionHelper.getLogger().log(LogStatus.PASS, "User Name is displayed in
+			// the header" + AccName);
+			// System.out.println(AccName);
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@Then("^I am able to edit my account account details")
+	public void IAmAbleToEditAccountDetails() throws InterruptedException {
+
+		try {
+			Thread.sleep(2000);
+			// wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.LoginLink));
+			// LocalDriverManager.getDriver().findElement(sleepcountryhomepage.LoginLink).click();
+			// Thread.sleep(2000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.myAccountlink));
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.myAccountlink).click();
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Navigated to Profile page");
+			Thread.sleep(5000);
+			// LocalDriverManager.getDriver().findElement(sleepcountryhomepage.accountDetails).click();
+			// ExecutionHelper.getLogger().log(LogStatus.PASS, "Account details page clicked
+			// ");
+			// Thread.sleep(5000);
+
+			if (!(FN == null)) {
+				wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.accountDetailsFN));
+				LocalDriverManager.getDriver().findElement(sleepcountryhomepage.accountDetailsFN).clear();
+				LocalDriverManager.getDriver().findElement(sleepcountryhomepage.accountDetailsFN).sendKeys(EditFN);
+				ExecutionHelper.getLogger().log(LogStatus.PASS, "Edited the First Name");
+				System.out.println("FN entered");
+				Thread.sleep(5000);
+
+			}
+
+			if (!(LN == null)) {
+				wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.accountDetailsLN));
+				LocalDriverManager.getDriver().findElement(sleepcountryhomepage.accountDetailsLN).clear();
+				LocalDriverManager.getDriver().findElement(sleepcountryhomepage.accountDetailsLN).sendKeys(EditLN);
+				ExecutionHelper.getLogger().log(LogStatus.PASS, "Last Name editted ");
+				System.out.println("LN entered");
+				Thread.sleep(5000);
+
+			}
+
+			if (EditSMScheckbox == "Yes") {
+				if (!LocalDriverManager.getDriver().findElement(sleepcountryhomepage.accountDetailsSMSCheckbox)
+						.isSelected()) {
+					Thread.sleep(4000);
+					System.out.println("checkbox not selected");
+					LocalDriverManager.getDriver().findElement(sleepcountryhomepage.accountDetailsSMSCheckbox).click();
+					ExecutionHelper.getLogger().log(LogStatus.PASS, "SMS CheckBox checked");
+					Thread.sleep(4000);
+				}
+			}
+			if (EditMailCheckbox == "Yes") {
+				if (!LocalDriverManager.getDriver().findElement(sleepcountryhomepage.accountDetailsNewsCheckbox)
+						.isSelected()) {
+					Thread.sleep(4000);
+					LocalDriverManager.getDriver().findElement(sleepcountryhomepage.accountDetailsNewsCheckbox).click();
+					ExecutionHelper.getLogger().log(LogStatus.PASS, "New CheckBox checked ");
+					Thread.sleep(4000);
+				}
+			}
+
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.accountDetailsSaveButton).click();
+			Thread.sleep(3000);
+			System.out.println("details successfull");
+			Wait<WebDriver> wait = new WebDriverWait(LocalDriverManager.getDriver(), 30);
+			WebElement Notification = wait.until(
+					ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.accountDetailsNotification));
+			Assert.assertTrue(Notification.isDisplayed());
+			System.out.println(Notification.getText() + " is displayed");
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Update Success Message is displayed");
+
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I add \"(.*)\" item to cart")
+	public void IAddItemToCard(String index) throws InterruptedException {
+		try {
+			// wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(sleepcountryhomepage.ProductNames))
+			Thread.sleep(5000);
+			int i = Integer.parseInt(index);
+			ISelectProductFromProductList(index);
+			Thread.sleep(2000);
+
+			LocalDriverManager.getDriver().navigate().refresh();
+			Thread.sleep(15000);
+			
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.SelectSizeDD).click();
+			Thread.sleep(2000);
+			
+			//String prod=LocalDriverManager.getDriver().findElements(sleepcountryhomepage.SizeDDItems).get(1).getText();
+			LocalDriverManager.getDriver().findElements(sleepcountryhomepage.SizeDDItems).get(1).click();
+			Thread.sleep(3000);
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Selected a size of the product");
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.AddtoCart).click();
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Added the product to the cart");
+			Thread.sleep(2000);
+
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I select \"(.*)\" product from the product List")
+	public void ISelectProductFromProductList(String i) throws InterruptedException {
+		try {
+			Thread.sleep(10000);
+			int index = Integer.parseInt(i);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.ProductListingCompareBtn));
+			actions.moveToElement(
+					LocalDriverManager.getDriver().findElement(sleepcountryhomepage.ProductListingCompareBtn))
+					.perform();
+			wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy((sleepcountryhomepage.ProductNames)));
+			List<WebElement> products = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.ProductNames);
+			actions.moveToElement(products.get(0)).perform();
+			products = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.ProductNames);
+			String prod=products.get(index).getText();
+			products.get(index).click();
+			System.out.println("Clicked on one product to view the details page: "+prod);
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Clicked on one product to view the details page: "+prod);
+			Thread.sleep(5000);
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I view the Product Details Page")
+	public void IViewProductDetailsPage() throws InterruptedException {
+		try {
+			Thread.sleep(2000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.PDPBreadCrumb));
+			Assert.assertTrue("Not navigated to product page or breadcrumb not displayed",
+					LocalDriverManager.getDriver().findElement(sleepcountryhomepage.PDPBreadCrumb).isDisplayed());
+			System.out.println("Navigated to the product page");
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Landed on Product details page");
+			Thread.sleep(2000);
+		}
+
+		catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I see the Title of that Product")
+	public void ISeeTitleOfProduct() throws InterruptedException {
+		try {
+			Thread.sleep(2000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.PDPTitle));
+			Assert.assertTrue("Product title not visible",
+					LocalDriverManager.getDriver().findElement(sleepcountryhomepage.PDPTitle).isDisplayed());
+			System.out.println("Product Title present"
+					+ LocalDriverManager.getDriver().findElement(sleepcountryhomepage.PDPTitle).getText());
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Product Title present"
+					+ LocalDriverManager.getDriver().findElement(sleepcountryhomepage.PDPTitle).getText());
+			Thread.sleep(2000);
+		}
+
+		catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I see Add to cart button")
+	public void ISeeAddtoCartBtnOnPDP() throws InterruptedException {
+		try {
+			Thread.sleep(2000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.AddtoCart));
+			Assert.assertTrue("Add to card not visible",
+					LocalDriverManager.getDriver().findElement(sleepcountryhomepage.AddtoCart).isDisplayed());
+			System.out.println("Add to cart button on PDP page present");
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Add to cart button on PDP page dsiplayed");
+			Thread.sleep(2000);
+		}
+
+		catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+
+	}
+
+	@When("^I see Add to wishlist button")
+	public void ISeeAddToWishlist() throws InterruptedException {
+		try {
+			Thread.sleep(2000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.PDPWishlist));
+			Assert.assertTrue("Add to wishlist not visible",
+					LocalDriverManager.getDriver().findElement(sleepcountryhomepage.PDPWishlist).isDisplayed());
+			System.out.println("Add to wishlist on PDP page present");
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Add to wishlist on PDP page dsiplayed");
+			Thread.sleep(2000);
+		}
+
+		catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+
+	}
+
+	@When("^I see the review and ratings")
+	public void ISeeReviewAndRatings() throws InterruptedException {
+		try {
+			Thread.sleep(2000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.PDPRatingStars));
+			Assert.assertTrue("Rating stars are not displayed",
+					LocalDriverManager.getDriver().findElement(sleepcountryhomepage.PDPRatingStars).isDisplayed());
+			System.out.println("Rating stars are present");
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Rating stars are displayed");
+			Assert.assertTrue("Write a review link not displayed",
+					LocalDriverManager.getDriver().findElement(sleepcountryhomepage.PDPRatingStars).isDisplayed());
+			System.out.println("Write a review link present");
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Write a review link displayed");
+			Thread.sleep(2000);
+		}
+
+		catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I see Product features")
+	public void ISeeFeaturesOfProd() throws InterruptedException {
+		try {
+			Thread.sleep(2000);
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.SelectSizeDD).click();
+			Thread.sleep(2000);
+			
+			//String prod=LocalDriverManager.getDriver().findElements(sleepcountryhomepage.SizeDDItems).get(1).getText();
+			LocalDriverManager.getDriver().findElements(sleepcountryhomepage.SizeDDItems).get(1).click();
+			Thread.sleep(3000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.PDPFeaturePlus));
+			
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.PDPFeaturePlus).click();
+			Thread.sleep(2000);
+			
+			Assert.assertTrue("Product Features not present or not visible", LocalDriverManager.getDriver()
+					.findElements(sleepcountryhomepage.PDPFeatures).size()>0);
+			
+			List<WebElement> features=LocalDriverManager.getDriver()
+					.findElements(sleepcountryhomepage.PDPFeatures);
+			
+			for(WebElement e:features)
+			{
+				System.out.println("Product Features present" + e.getText());
+				ExecutionHelper.getLogger().log(LogStatus.PASS, "Product Features present" +e.getText());
+			}
+			
+						
+			Thread.sleep(2000);
+		}
+
+		catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I see Product Quantity")
+	public void ISeeProductQuantity() throws InterruptedException {
+		try {
+			Thread.sleep(2000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.PDPQuantityPlus));
+			Assert.assertTrue("Quantity plus button not visible",
+					LocalDriverManager.getDriver().findElement(sleepcountryhomepage.PDPQuantityPlus).isDisplayed());
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Product Quantity Plus button present");
+			System.out.println("Product Quantity plus button present");
+
+			Assert.assertTrue("Quantity minus button not visible",
+					LocalDriverManager.getDriver().findElement(sleepcountryhomepage.PDPQuantityMinus).isDisplayed());
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Product Quantity Minus button present");
+			Thread.sleep(2000);
+		}
+
+		catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I see the Image of the Product")
+	public void ISeeProductImage() throws InterruptedException {
+		try {
+			Thread.sleep(2000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.PDPImage));
+			Assert.assertTrue("Quantity plus button not visible",
+					LocalDriverManager.getDriver().findElement(sleepcountryhomepage.PDPImage).isDisplayed());
+			System.out.println("Image present in PDP page");
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Image present in PDP page");
+			Thread.sleep(2000);
+		}
+
+		catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I click on mini cart and clear mini cart")
+	public void IClickOnMiniCartAndClear() throws InterruptedException {
+		try {
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.SleepCountryImage).click();
+			Thread.sleep(10000);
+			wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(sleepcountryhomepage.MiniCartWithItems));
+			String countOfCart = LocalDriverManager.getDriver().findElement(sleepcountryhomepage.MiniCartWithItems)
+					.getText();
+			if (Integer.parseInt(countOfCart) > 0) {
+				IClickOnMiniCart(countOfCart);
+				LocalDriverManager.getDriver().findElement(sleepcountryhomepage.MiniCartClearAll).click();
+				Thread.sleep(2000);
+			} else
+				ExecutionHelper.getLogger().log(LogStatus.PASS, "No Items in cart to clear");
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Elements are cleared from the Mini Cart");
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	public void IClickOnMiniCart(String countOfCart) throws InterruptedException {
+		try {
+			int count = Integer.parseInt(countOfCart);
+			if (count > 0)
+				LocalDriverManager.getDriver().findElement(sleepcountryhomepage.MiniCartWithItems).click();
+			else
+				LocalDriverManager.getDriver().findElement(sleepcountryhomepage.MiniCart).click();
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Clicked on Mini Cart");
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@Then("^I click on Checkout in Mini Cart")
+	public void IClickOnCheckOutInMiniCart() throws InterruptedException {
+		try {
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.SleepCountryImage).click();
+			Thread.sleep(10000);
+			
+			wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(sleepcountryhomepage.MiniCartWithItems));
+			String countOfCart = LocalDriverManager.getDriver().findElement(sleepcountryhomepage.MiniCartWithItems)
+					.getText();
+			IClickOnMiniCart(countOfCart);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.MiniCartCheckOut));
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.MiniCartCheckOut).click();
+			Thread.sleep(5000);
+			// Validate user is navigated to cart
+			wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(sleepcountryhomepage.MyCartHeader));
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "My Cart Opened");
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@Then("^I am able to edit my cart details")
+	public void IAmAbleToEditCart() throws InterruptedException {
+		try {
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.SleepCountryImage).click();
+			Thread.sleep(10000);
+			
+			wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(sleepcountryhomepage.MiniCartWithItems));
+			String countOfCart = LocalDriverManager.getDriver().findElement(sleepcountryhomepage.MiniCartWithItems)
+					.getText();
+			IClickOnMiniCart(countOfCart);
+			wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(sleepcountryhomepage.MiniCartItems));
+			List<WebElement> ItemsInMiniCart = LocalDriverManager.getDriver()
+					.findElements(sleepcountryhomepage.MiniCartItems);
+			List<WebElement> CartRemoveItem = LocalDriverManager.getDriver()
+					.findElements(sleepcountryhomepage.MiniCartRemoveCartItem);
+			String firstElement = ItemsInMiniCart.get(0).getText();
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Cart Item that will be removed" + firstElement);
+			CartRemoveItem.get(0).click();
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Removed the Item from Cart");
+			System.out.println("Removed the item from cart");
+			Thread.sleep(3000);
+			ItemsInMiniCart = LocalDriverManager.getDriver()
+					.findElements(sleepcountryhomepage.MiniCartItems);
+			for (WebElement e : ItemsInMiniCart) {
+				if (!e.getText().equalsIgnoreCase(firstElement))
+					ExecutionHelper.getLogger().log(LogStatus.PASS, "Element is removed from the Mini Cart");
+				else
+					continue;
+			}
+
+			Thread.sleep(2000);
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@Then("^I can clear my mini cart")
+	public void IAmAbleToCheckout() throws InterruptedException {
+		try {
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.MiniCartClearAll));
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.MiniCartClearAll).click();
+			Thread.sleep(2000);
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@Then("^I see there are no items in my mini cart")
+	public void ISeeNoItemsInMiniCart() throws InterruptedException {
+		try {
+			wait.until(ExpectedConditions.invisibilityOfElementLocated(sleepcountryhomepage.MiniCartItems));
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Elements are cleared from the Mini Cart");
+
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I navigate to Order History")
+	public void INavigateToOrderDetails() throws InterruptedException {
+		try {
+			Thread.sleep(10000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated((sleepcountryhomepage.LoginLink)));
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.LoginLink).click();
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.OrderHistory));
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.OrderHistory).click();
+
+			Thread.sleep(10000);
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Clicked on Order History");
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@Then("^I verify the Order History")
+	public void IverifytheOrderHistory() throws InterruptedException {
+		try {
+			Thread.sleep(15000);
+			String orderHst;
+			// JavascriptExecutor js= ((JavascriptExecutor) driver);
+			// js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+			List<WebElement> Order = LocalDriverManager.getDriver().findElements(sleepcountryhomepage.OrderHistoryTest);
+
+			String Id = Order.get(1).getText();
+			for (WebElement e : Order) {
+				orderHst = e.getText();
+				System.out.println("The Order History details are " + orderHst);
+				ExecutionHelper.getLogger().log(LogStatus.PASS, "Order History verified");
+			}
+			Thread.sleep(3000);
+
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I click Order details")
+	public void IclickOrderdetails() throws InterruptedException {
+		try {
+			wait.until(ExpectedConditions.elementToBeClickable(
+					LocalDriverManager.getDriver().findElement(sleepcountryhomepage.Orderdetails)));
+			List<WebElement> Orderdetailslist = LocalDriverManager.getDriver()
+					.findElements(sleepcountryhomepage.Orderdetails);
+
+			Thread.sleep(15000);
+			Actions actions = new Actions(LocalDriverManager.getDriver());
+
+			if (!Orderdetailslist.isEmpty()) {
+				actions.moveToElement(Orderdetailslist.get(0)).click().perform();
+				Thread.sleep(2000);
+
+			}
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Order details clicked");
+
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@Then("^I verify the Order ID")
+	public void IverifytheOrderID() throws InterruptedException {
+		try {
+			Thread.sleep(2000);
+			System.out.println("The order Id is "
+					+ LocalDriverManager.getDriver().findElement(sleepcountryhomepage.Orderid).getText());
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Order ID verified");
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@Given("^I click update password link")
+	public void Iclickupdatepasswordlink() throws InterruptedException {
+		try {
+			wait.until(ExpectedConditions.visibilityOfElementLocated((sleepcountryhomepage.LoginLink)));
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.LoginLink).click();
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.Updatepassword));
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.Updatepassword).click();
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Clicked on Update Password");
+
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I update my password as \"(.*)\" from the old password \"(.*)\"")
+	public void Iupdatemynewpassword(String newpassword, String oldpassword) throws InterruptedException {
+		try {
+			wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.Newpassword));
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.Oldpassword).sendKeys(oldpassword);
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.Newpassword).sendKeys(newpassword);
+			Thread.sleep(5000);
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.ConfirmNewpassword).sendKeys(newpassword);
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "New Password entered and confirmed");
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@Then("^I click on Update password")
+	public void IclickonUpdatepassword() throws InterruptedException {
+		try {
+			Actions actions = new Actions(LocalDriverManager.getDriver());
+			actions.moveToElement(LocalDriverManager.getDriver().findElement(sleepcountryhomepage.UpdatePasswordbutton))
+					.click().perform();
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Password Updated");
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@When("^I click on SignOut Button")
+	public void IclickonSignOutButton() throws InterruptedException {
+		try {
+			Thread.sleep(2000);
+			LocalDriverManager.getDriver().findElement(sleepcountryhomepage.Signout).click();
+			Thread.sleep(2000);
+			LocalDriverManager.getDriver().navigate().refresh();
+			Thread.sleep(5000);
+			ExecutionHelper.getLogger().log(LogStatus.PASS, "Signed out of the application");
+		} catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+
+	@Then("^I am able to view my Wishlist")
+	public void IAmAbleToViewWishlist() throws InterruptedException {
+		try
+		{
+		List<WebElement> mainmen = LocalDriverManager.getDriver()
+				.findElements(sleepcountryhomepage.megaMenu);
+		action.moveToElement(mainmen.get(0)).build().perform();
+		System.out.println("hovered");
+		Thread.sleep(2000);
+		LocalDriverManager.getDriver()
+				.findElements(sleepcountryhomepage.SubMenuByTop).get(0).click();
+
+		// clicking on the product
+		//wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.wishlistItem)).click();
+		ISelectProductFromProductList("0");
+		
+		// clicking on Add to wishlist button
+		WebElement addButton = wait
+				.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.wishlistAddButton));
+		String wishlistName = LocalDriverManager.getDriver().findElement(sleepcountryhomepage.wishlistProdName)
+				.getText();
+
+		addButton.click();
+		Assert.assertTrue(LocalDriverManager.getDriver().findElement(sleepcountryhomepage.AddedtoWishlist).getText()
+				.equalsIgnoreCase("ADDED TO WISHLIST"));
+		System.out.println("added to wishlist");
+
+		// Verifing the wishlisted product from my account
+
+		LocalDriverManager.getDriver().findElement(By.xpath("//span[@id='CC-loginHeader-login']")).click();
+		LocalDriverManager.getDriver().findElement(sleepcountryhomepage.wishlistDropdown).click();
+		String wishlistStoredName = wait
+				.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.wishlistgetTitle)).getText();
+
+		Assert.assertTrue(wishlistStoredName.equalsIgnoreCase(wishlistName));
+		System.out.println("Wishlist product is present");
+
+		// removing the product
+
+		LocalDriverManager.getDriver().findElement(sleepcountryhomepage.wishlistRemove).click();
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(sleepcountryhomepage.wishlistgetTitle));
+
+		System.out.println("wishlist removed");
+		}
+		catch (Exception e) {
+			ExecutionHelper.getLogger().log(LogStatus.FAIL,
+					"Exception " + e + " occurred while navigating to Home Page");
+		}
+	}
+	
+	  
+	 @Given("^I click on forgot password")
+		public void IClickForgotPassword() throws InterruptedException {
+			try
+			{
+//				LocalDriverManager.getDriver().findElement(sleepcountryhomepage.LoginLink).click();
+				Thread.sleep(5000);
+				LocalDriverManager.getDriver().findElement(sleepcountryhomepage.forgotPassword).click();
+				Thread.sleep(3000);
+				ExecutionHelper.getLogger().log(LogStatus.PASS, "Clicked on forgotpassword link");
+			}
+			
+			catch (Exception e) {
+				ExecutionHelper.getLogger().log(LogStatus.FAIL,"Exception " + e + " occurred while navigating to Home Page");
+			
+			}
+	 	}
+	    @When("^I enter my emailid as \"(.*)\"")
+		public void IEnterEmailIDInForgotPswd(String emailID) throws InterruptedException {
+			try
+			{
+			       wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.emailPasswordReset));
+			       LocalDriverManager.getDriver().findElement(sleepcountryhomepage.emailPasswordReset).sendKeys(emailID);
+			       Thread.sleep(2000);
+			       ExecutionHelper.getLogger().log(LogStatus.PASS, "Email ID entered for password rest as : "+emailID);
+		             
+			}
+			
+			catch (Exception e) {
+				ExecutionHelper.getLogger().log(LogStatus.FAIL,"Exception " + e + " occurred while navigating to Home Page");
+			
+			}
+	    }
+	   
+	    @When("^I click Reset password button")
+		public void IClickResetPasswordBtn() throws InterruptedException {
+			try
+			{
+				LocalDriverManager.getDriver().findElement(sleepcountryhomepage.PasswordResetButton).click();
+				Thread.sleep(5000);
+				ExecutionHelper.getLogger().log(LogStatus.PASS, "Clicked on Password Reset Button");
+	             
+			}
+			
+			catch (Exception e) {
+				ExecutionHelper.getLogger().log(LogStatus.FAIL,"Exception " + e + " occurred while navigating to Home Page");
+			
+			}
+	    } 
+	    @Then("^I must see the right message displayed for password reset")
+		public void IMustSeeRighErrorMessage() throws InterruptedException {
+			try
+			{
+				String successMsg = "An email with the password reset link has been sent.The link expires in 24 hrs. Please click on the link to reset your password securely.";
+			       wait.until(ExpectedConditions.visibilityOfElementLocated(sleepcountryhomepage.successMessage));
+			       Assert.assertTrue("Expected success message not displayed",LocalDriverManager.getDriver().findElement(sleepcountryhomepage.successMessage).getText().equalsIgnoreCase(successMsg));
+			       ExecutionHelper.getLogger().log(LogStatus.PASS, "SuccessMessageReceived");
+			}
+			
+			catch (Exception e) {
+				ExecutionHelper.getLogger().log(LogStatus.FAIL,"Exception " + e + " occurred while navigating to Home Page");
+			
+			}
+	    }
+	    
+	    @When("^I click on Checkout in Cart")
+	    public void IClickCheckoutInCart() throws InterruptedException
+	    {
+	    	try
+	    	{
+	    		Thread.sleep(5000);
+	    		LocalDriverManager.getDriver().findElement(sleepcountryhomepage.CheckOutOnCart).click();
+	    		ExecutionHelper.getLogger().log(LogStatus.PASS, "Clicked on Checkout in the Cart");
+	    	}
+	    	catch (Exception e) {
+				ExecutionHelper.getLogger().log(LogStatus.FAIL,"Exception " + e + " occurred while navigating to Home Page");
+			
+			}
+	    }
+	    
+	    @Then("^I validate the guest checkout fields")
+	    public void IValidateGuestCheckOutFields() throws InterruptedException
+	    {
+	    	try
+	    	{
+	    		Thread.sleep(10000);
+	    		Assert.assertTrue("Have an account not visible",LocalDriverManager.getDriver().findElement(sleepcountryhomepage.HaveAccountText).isDisplayed());
+	    		
+	    		Assert.assertTrue("Login to checkout link not visible",LocalDriverManager.getDriver().findElement(sleepcountryhomepage.LoginToCheckOutlink).isDisplayed());
+	    		
+	    		Assert.assertTrue("Email ID field not visible",LocalDriverManager.getDriver().findElement(sleepcountryhomepage.ContactEmailID).isDisplayed());
+	    		
+	    		Assert.assertTrue("Phone no not visible",LocalDriverManager.getDriver().findElement(sleepcountryhomepage.ContactPhone).isDisplayed());
+	    		Assert.assertTrue("Send SMS checkbox not visible",LocalDriverManager.getDriver().findElement(sleepcountryhomepage.SendSMSCB).isDisplayed());
+	    		Assert.assertTrue("First name not visible",LocalDriverManager.getDriver().findElement(sleepcountryhomepage.FirstNameGuest).isDisplayed());
+	    		Assert.assertTrue("Last name not visible",LocalDriverManager.getDriver().findElement(sleepcountryhomepage.LastNameGuest).isDisplayed());
+	    		
+	    		
+	    		actions.moveToElement(LocalDriverManager.getDriver().findElement(sleepcountryhomepage.AddressGuest)).perform();
+	    		
+	    		Assert.assertTrue("Address line 1 not visible",LocalDriverManager.getDriver().findElement(sleepcountryhomepage.AddressGuest).isDisplayed());
+	    		Assert.assertTrue("Address line 2 not visible",LocalDriverManager.getDriver().findElement(sleepcountryhomepage.Address2Guest).isDisplayed());
+	    		Assert.assertTrue("City not visible",LocalDriverManager.getDriver().findElement(sleepcountryhomepage.CityGuest).isDisplayed());
+	    		
+	    		actions.moveToElement(LocalDriverManager.getDriver().findElement(sleepcountryhomepage.CityGuest)).perform();
+	    		
+	    		Assert.assertTrue("Provice not visible",LocalDriverManager.getDriver().findElement(sleepcountryhomepage.ProvinceGuest).isDisplayed());
+	    		Assert.assertTrue("Zip code not visible",LocalDriverManager.getDriver().findElement(sleepcountryhomepage.ZipCodeGuest).isDisplayed());
+	    		Assert.assertTrue("Payment Options not visible",LocalDriverManager.getDriver().findElements(sleepcountryhomepage.PaymentOptions).size()>0);
+	    		Assert.assertTrue("Cart Summary not visible",LocalDriverManager.getDriver().findElement(sleepcountryhomepage.CartSummarySection).isDisplayed());
+	    		ExecutionHelper.getLogger().log(LogStatus.PASS, "Fields on Guest Checkout Validated");
+	    	}
+	    	
+	    	catch(Exception e)
+	    	{
+	    		ExecutionHelper.getLogger().log(LogStatus.FAIL,"Exception " + e + " occurred while navigating to Home Page");
+				
+	    	}
+	    }
+}

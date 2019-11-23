@@ -1,0 +1,16 @@
+package helper;
+
+import java.util.Properties;
+
+public class WebDriverHelper {
+	private static Properties properties;
+	private static String DRIVER_PATH;
+	private static String getDriverPath() {
+		DRIVER_PATH = Props.getProp("driver.root.dir");
+		// System.out.println("DRIVER_PATH DRIVER_PATH DRIVER_PATH "+DRIVER_PATH);
+		return DRIVER_PATH;
+	}
+	
+	
+
+}

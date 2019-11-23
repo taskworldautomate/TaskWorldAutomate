@@ -1,0 +1,59 @@
+package com.cucumber.runner;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import com.cucumber.framework.PageObject;
+import com.cucumber.framework.helpers.ExecutionHelper;
+import com.cucumber.framework.helpers.LocalDriverManager;
+
+import cucumber.api.CucumberOptions;
+import cucumber.api.testng.CucumberFeatureWrapper;
+import cucumber.api.testng.PickleEventWrapper;
+import cucumber.api.testng.TestNGCucumberRunner;
+
+
+@CucumberOptions(
+		
+    features = {"src/test/resources/features/"},
+    glue = {"com.cucumber.stepdefinitions"},
+
+    tags ={"@validateProductDetailsPageFlow"}
+    )
+public class RunPDPPageFlow  {
+	
+	private TestNGCucumberRunner testNGCucumberRunner;
+
+	@BeforeTest(alwaysRun=true)
+	public void setUpClass() throws Exception {
+		testNGCucumberRunner = new TestNGCucumberRunner(this.getClass());
+	}
+
+
+	@AfterMethod(alwaysRun=true)
+	public void endTestExecution(){
+		LocalDriverManager.getDriver().quit();
+		try {
+			ExecutionHelper.extentReportFlush();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Test(groups = "cucumber", description = "Runs Cucumber Feature" , dataProvider = "scenarios")
+	public void scenario(PickleEventWrapper pickeEvent, CucumberFeatureWrapper cucumberFeature) throws Throwable {
+		System.out.println("Test Case One in " + getClass().getSimpleName()
+				+ " with Thread Id:- " + Thread.currentThread().getId());
+		testNGCucumberRunner.runScenario(pickeEvent.getPickleEvent());
+	}
+	
+	@DataProvider
+	public Object[][] scenarios() {
+		return testNGCucumberRunner.provideScenarios();
+	}
+
+}

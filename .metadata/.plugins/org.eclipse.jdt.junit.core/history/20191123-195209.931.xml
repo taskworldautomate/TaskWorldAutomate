@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="RunCategoryNavigationFlow" project="TaskWorldLogin" tests="1" started="1" failures="0" errors="0" ignored="0">
+  <testsuite name="runner.RunCategoryNavigationFlow" time="13.566">
+    <testsuite name="Feature: TaskWorld Login Scenarios" time="13.566">
+      <testcase name="User creates task after login" classname="TaskWorld Login Scenarios" time="13.566">
+        <skipped>cucumber.api.PendingException: TODO: implement me&#13;
+	at stepdefinitions.TaskWorldHomePageSteps.an_existing_user_logs_into_the_system(TaskWorldHomePageSteps.java:55)&#13;
+	at ✽.An existing user logs into the system(features/TaskWorldHomePage.feature:7)&#13;
+&#13;
+</skipped>
+      </testcase>
+    </testsuite>
+  </testsuite>
+</testrun>

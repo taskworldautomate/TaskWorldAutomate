@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="RunCategoryNavigationFlow" project="TaskWorldLogin" tests="1" started="1" failures="0" errors="0" ignored="0">
+  <testsuite name="runner.RunCategoryNavigationFlow" incomplete="true">
+    <testsuite name="Feature: TaskWorld Login Scenarios" incomplete="true">
+      <testcase name="User creates task after login" classname="TaskWorld Login Scenarios" incomplete="true"/>
+    </testsuite>
+  </testsuite>
+</testrun>

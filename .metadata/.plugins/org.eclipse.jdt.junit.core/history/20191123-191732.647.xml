@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="RunCategoryNavigationFlow" project="TaskWorldLogin" tests="1" started="1" failures="0" errors="1" ignored="0">
+  <testsuite name="runner.RunCategoryNavigationFlow" time="6.826">
+    <testsuite name="Feature: TaskWorld Login Scenarios" time="6.826">
+      <testcase name="User creates task after login" classname="TaskWorld Login Scenarios" time="6.826">
+        <error>java.lang.NullPointerException&#13;
+	at helper.Props.getProp(Props.java:43)&#13;
+	at helper.WebDriverHelper.openURL(WebDriverHelper.java:33)&#13;
+	at stepdefinitions.TaskWorldHomePageSteps.user_Navigates_to_Home_Page_and_Logs_in(TaskWorldHomePageSteps.java:25)&#13;
+	at ✽.User Navigates to Home Page and Logs in(features/TaskWorldHomePage.feature:6)&#13;
+&#13;
+</error>
+      </testcase>
+    </testsuite>
+  </testsuite>
+</testrun>

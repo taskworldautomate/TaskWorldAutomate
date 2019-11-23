@@ -1,0 +1,33 @@
+url=https://enterprise.taskworld.com/login
+
+#Web Browser mode
+browser=chrome
+#browser=iexplore
+#browser=firefox
+#browser=phantomjs
+#platform=win
+saucelabs=N
+
+#Appium Webapp mode
+#browser=appium
+#platform=Android1
+
+
+
+#Applicable for FirefoxDriver, ChromeDriver and InternetExplorerDriver full path location
+#driver.root.dir=tools\\firefox\\win32\\geckodriver.exe
+driver.root.dir=tools\\chromedriver\\win32\\chromedriver.exe
+#driver.root.dir=tools\\iedriver\\win32\\IEDriverServer1.exe
+#driver.root.dir=tools\\phantomjs\\win32\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe
+
+
+
+#FOR RUNNING
+#WITHOUT SELENIUM GRID set no value for driverhost =
+#WITH SELENIUM GRID set driverhost with server name e.g =  localhost, dac-rds-pun01
+driverhost=
+driverport=4444
+browser.width=1280
+browser.height=1024
+
+

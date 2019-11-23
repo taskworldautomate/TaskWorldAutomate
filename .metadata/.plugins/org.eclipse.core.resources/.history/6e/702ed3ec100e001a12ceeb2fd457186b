@@ -1,0 +1,16 @@
+package helper;
+
+import org.openqa.selenium.By;
+
+public class LocatorRepo {
+	
+	public By username = By.xpath("//*[@type='email']");
+	public By password = By.xpath("//*[@type='password']");
+	
+	public By loginBtn = By.xpath("//*[@type='submit']");
+	
+	public By newProjButtonBox = By.xpath("//*[@id='react']//div[contains(@class,'tw-new-project-button-box')]");
+	
+	
+	
+}

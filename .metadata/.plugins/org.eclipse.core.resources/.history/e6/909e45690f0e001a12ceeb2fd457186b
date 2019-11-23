@@ -1,0 +1,142 @@
+package stepdefinitions;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.testng.Assert;
+
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import helper.LocatorRepo;
+import helper.WebDriverHelper;
+
+public class TaskWorldHomePageSteps {
+
+	private static final Logger LOG = LoggerFactory.getLogger(TaskWorldHomePageSteps.class);
+	WebDriver driver = WebDriverHelper.initiateDriver();;
+	LocatorRepo locatorRepo = new LocatorRepo();
+	
+	
+	WebDriverWait wait = new WebDriverWait(driver, 15);
+
+	@Given("User Navigates to Home Page and Logs in")
+	public void user_Navigates_to_Home_Page_and_Logs_in() throws InterruptedException {
+	   
+		
+		WebDriverHelper.openURL(driver);
+		
+		
+		
+		driver.findElement(locatorRepo.username).sendKeys("souvikghosh88@gmail.com");
+		driver.findElement(locatorRepo.password).sendKeys("Passw0rd@1");
+		//driver.findElement(locatorRepo.loginBtn).click();
+		
+		JavascriptExecutor executor = (JavascriptExecutor) driver;
+		executor.executeScript("arguments[0].click();", driver.findElement(locatorRepo.loginBtn));
+		
+		Thread.sleep(2000);
+		Actions builder = new Actions(driver);
+		builder.moveToElement(driver.findElement(locatorRepo.loginBtn)).click(driver.findElement(locatorRepo.loginBtn));
+		builder.perform();
+		
+		
+
+		//If automated login to the page is not allowed, tryin login via Google
+		driver.findElement(By.xpath("//*[@class='tw-google-login-button__text']/span")).click();
+		driver.findElement(By.xpath("//*[@type='email']")).sendKeys("souvikghosh88@gmail.com");
+		
+		builder.sendKeys(Keys.ENTER).build().perform();
+		Thread.sleep(5000);
+		
+		driver.findElement(By.xpath("//*[@type='password']")).sendKeys("Passw0rd@1");
+		builder.sendKeys(Keys.ENTER).build().perform();
+		
+		
+		
+		
+		
+	}
+
+	@When("An existing user logs into the system")
+	public void an_existing_user_logs_into_the_system() {
+		System.out.println("test");
+	}
+
+	@When("The user creates a new project")
+	public void the_user_creates_a_new_project() throws InterruptedException {
+	
+		driver.switchTo().activeElement();
+		
+		List<WebElement> iframes = driver.findElements(By.tagName("iframe"));
+		System.out.println("iframe -----------------------------------"+iframes.size());
+		Thread.sleep(5000);
+		
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='react']//div[contains(@class,'tw-new-project-button-box')]")));
+		//Thread.sleep(12000);
+		driver.findElement(By.xpath("//*[@id='react']//div[contains(@class,'tw-new-project-button-box')]")).click();
+		Thread.sleep(2000);
+		iframes = driver.findElements(By.tagName("iframe"));
+		System.out.println("iframe -----------------------------------"+iframes.size());
+		driver.findElement(By.xpath("//*[@name='project-name']")).sendKeys("Test Automation");
+		
+		driver.findElement(By.xpath("(//*[@name='description'])[2]")).sendKeys("Test Automation for Task World");
+		
+		Actions builder = new Actions(driver);
+		builder.sendKeys(Keys.ENTER).build().perform();
+		Thread.sleep(2000);
+		
+		builder.sendKeys(Keys.ENTER).build().perform();
+		
+	}
+
+	@When("The user creates a new tasklist in the project")
+	public void the_user_creates_a_new_tasklist_in_the_project() {
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@placeholder='Tasklist title']")));
+		
+		driver.findElement(By.xpath("//*[@placeholder='Tasklist title']")).sendKeys("Sample TaskList");
+		Actions builder = new Actions(driver);
+		builder.sendKeys(Keys.ENTER).build().perform();
+	}
+
+	@When("The user adds a new task to the tasklist")
+	public void the_user_adds_a_new_task_to_the_tasklist() throws InterruptedException {
+		driver.switchTo().defaultContent();
+		Actions builder = new Actions(driver);
+		builder.sendKeys(Keys.ESCAPE).build().perform();
+	   driver.findElement(By.xpath("//*[contains(@class,'icon-add')]")).click();
+	   Thread.sleep(2000);
+	   driver.findElement(By.xpath("//*[contains(@placeholder,'Create')]")).sendKeys("This is a task");
+	   driver.findElement(By.xpath("//span[contains(text(),'Create')]")).click();
+	}
+
+	@When("The user marks the task as completed")
+	public void the_user_marks_the_task_as_completed() throws InterruptedException {
+	    driver.findElement(By.xpath("//*[contains(@class,'tw-task-header__checkbox')]")).click();
+	    Thread.sleep(2000);
+	    driver.switchTo().activeElement();
+	    driver.findElement(By.xpath("//*[contains(@class,'header')][contains(@class,'task-header__ti')]")).click();
+	}
+
+	@Then("The user opens the completed task to see its details")
+	public void the_user_opens_the_completed_task_to_see_its_details() {
+	   driver.findElement(By.xpath("//*[contains(@class,'task-header')]")).click();
+	   driver.switchTo().activeElement();
+	   Assert.assertTrue(driver.findElement(By.xpath("//*[contains(@class,'tw-property-tab-with-menu__tab-container')]")).isDisplayed());
+	}
+
+
+	
+}

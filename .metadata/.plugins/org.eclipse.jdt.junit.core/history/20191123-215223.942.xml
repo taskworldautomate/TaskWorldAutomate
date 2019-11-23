@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="RunCategoryNavigationFlow" project="TaskWorldLogin" tests="1" started="1" failures="0" errors="1" ignored="0">
+  <testsuite name="runner.RunCategoryNavigationFlow" time="60.488">
+    <testsuite name="Feature: TaskWorld Login Scenarios" time="60.488">
+      <testcase name="User creates task after login" classname="TaskWorld Login Scenarios" time="60.488">
+        <error>org.openqa.selenium.NoSuchElementException: Cannot locate an element using xpath=//*[contains(@class,'properties-header')][contains(@class,'__checkbox')]
+For documentation on this error, please visit: https://www.seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.141.59', revision: 'e82be7d358', time: '2018-11-14T08:17:03'
+System info: host: 'USHYDSOUVIGHOS2', ip: '192.168.1.4', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_161'
+Driver info: driver.version: RemoteWebDriver&#13;
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:327)&#13;
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:428)&#13;
+	at org.openqa.selenium.By$ByXPath.findElement(By.java:353)&#13;
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:315)&#13;
+	at stepdefinitions.TaskWorldHomePageSteps.the_user_marks_the_task_as_completed(TaskWorldHomePageSteps.java:129)&#13;
+	at ✽.The user marks the task as completed(features/TaskWorldHomePage.feature:11)&#13;
+&#13;
+</error>
+      </testcase>
+    </testsuite>
+  </testsuite>
+</testrun>

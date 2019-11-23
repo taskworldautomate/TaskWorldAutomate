@@ -1,0 +1,111 @@
+package stepdefinitions;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import helper.LocatorRepo;
+import helper.WebDriverHelper;
+
+public class TaskWorldHomePageSteps {
+
+	private static final Logger LOG = LoggerFactory.getLogger(TaskWorldHomePageSteps.class);
+	WebDriver driver = null;
+	LocatorRepo locatorRepo = new LocatorRepo();
+	
+	
+	@Given("User Navigates to Home Page and Logs in")
+	public void user_Navigates_to_Home_Page_and_Logs_in() throws InterruptedException {
+	   
+		driver = WebDriverHelper.initiateDriver();
+		WebDriverHelper.openURL(driver);
+		
+		
+		
+		driver.findElement(locatorRepo.username).sendKeys("souvikghosh88@gmail.com");
+		driver.findElement(locatorRepo.password).sendKeys("Passw0rd@1");
+		//driver.findElement(locatorRepo.loginBtn).click();
+		
+		JavascriptExecutor executor = (JavascriptExecutor) driver;
+		executor.executeScript("arguments[0].click();", driver.findElement(locatorRepo.loginBtn));
+		
+		Thread.sleep(2000);
+		Actions builder = new Actions(driver);
+		builder.moveToElement(driver.findElement(locatorRepo.loginBtn)).click(driver.findElement(locatorRepo.loginBtn));
+		builder.perform();
+		
+		
+
+		//If automated login to the page is not allowed, tryin login via Google
+		driver.findElement(By.xpath("//*[@class='tw-google-login-button__text']/span")).click();
+		driver.findElement(By.xpath("//*[@type='email']")).sendKeys("souvikghosh88@gmail.com");
+		
+		builder.sendKeys(Keys.ENTER).build().perform();
+		Thread.sleep(5000);
+		
+		driver.findElement(By.xpath("//*[@type='password']")).sendKeys("Passw0rd@1");
+		builder.sendKeys(Keys.ENTER).build().perform();
+		
+		
+		
+		
+		
+	}
+
+	@When("An existing user logs into the system")
+	public void an_existing_user_logs_into_the_system() {
+		System.out.println("test");
+	}
+
+	@When("The user creates a new project")
+	public void the_user_creates_a_new_project() throws InterruptedException {
+		WebDriverWait wait = new WebDriverWait(driver, 15);
+		driver.switchTo().defaultContent();
+		wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[contains(@class,'tw-new-project-button-box')]")));
+		Thread.sleep(12000);
+		driver.findElement(By.xpath("//div[contains(@class,'tw-new-project-button-box')]")).click();
+		Thread.sleep(2000);
+		driver.switchTo().activeElement();
+		driver.findElement(By.xpath("//*[@name='project-name']")).sendKeys("Test Automation");
+	}
+
+	@When("The user creates a new tasklist in the project")
+	public void the_user_creates_a_new_tasklist_in_the_project() {
+	    // Write code here that turns the phrase above into concrete actions
+	    throw new cucumber.api.PendingException();
+	}
+
+	@When("The user adds a new task to the tasklist")
+	public void the_user_adds_a_new_task_to_the_tasklist() {
+	    // Write code here that turns the phrase above into concrete actions
+	    throw new cucumber.api.PendingException();
+	}
+
+	@When("The user marks the task as completed")
+	public void the_user_marks_the_task_as_completed() {
+	    // Write code here that turns the phrase above into concrete actions
+	    throw new cucumber.api.PendingException();
+	}
+
+	@Then("The user opens the completed task to see its details")
+	public void the_user_opens_the_completed_task_to_see_its_details() {
+	    // Write code here that turns the phrase above into concrete actions
+	    throw new cucumber.api.PendingException();
+	}
+
+
+	
+}

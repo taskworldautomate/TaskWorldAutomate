@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="RunCategoryNavigationFlow" project="TaskWorldLogin" tests="1" started="1" failures="0" errors="1" ignored="0">
+  <testsuite name="runner.RunCategoryNavigationFlow" time="0.0">
+    <testsuite name="Feature: TaskWorld Login Scenarios" time="0.0">
+      <testcase name="User creates task after login" classname="TaskWorld Login Scenarios" time="0.0">
+        <error>java.lang.NullPointerException&#13;
+	at sun.misc.MetaIndex.mayContain(MetaIndex.java:242)&#13;
+	at sun.misc.URLClassPath$JarLoader.getResource(URLClassPath.java:1032)&#13;
+	at sun.misc.URLClassPath.getResource(URLClassPath.java:239)&#13;
+	at sun.misc.URLClassPath.getResource(URLClassPath.java:292)&#13;
+	at java.lang.ClassLoader.getBootstrapResource(ClassLoader.java:1264)&#13;
+	at java.lang.ClassLoader.getResource(ClassLoader.java:1093)&#13;
+	at java.lang.ClassLoader.getResource(ClassLoader.java:1091)&#13;
+	at java.net.URLClassLoader.getResourceAsStream(URLClassLoader.java:232)&#13;
+	at java.lang.Class.getResourceAsStream(Class.java:2223)&#13;
+	at helper.Props.loadRunConfigProps(Props.java:63)&#13;
+	at helper.WebDriverHelper.getDriverPath(WebDriverHelper.java:14)&#13;
+	at helper.WebDriverHelper.setDriverProperty(WebDriverHelper.java:22)&#13;
+	at helper.WebDriverHelper.initiateDriver(WebDriverHelper.java:26)&#13;
+	at stepdefinitions.TaskWorldHomePageSteps.user_Navigates_to_Home_Page_and_Logs_in(TaskWorldHomePageSteps.java:24)&#13;
+	at ✽.User Navigates to Home Page and Logs in(features/TaskWorldHomePage.feature:6)&#13;
+&#13;
+</error>
+      </testcase>
+    </testsuite>
+  </testsuite>
+</testrun>

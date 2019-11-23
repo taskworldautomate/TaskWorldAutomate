@@ -1,0 +1,11 @@
+package helper;
+
+import org.openqa.selenium.By;
+
+public class LocatorRepo {
+	
+	public By username = By.xpath("//*[@type='email']");
+	
+	
+	
+}

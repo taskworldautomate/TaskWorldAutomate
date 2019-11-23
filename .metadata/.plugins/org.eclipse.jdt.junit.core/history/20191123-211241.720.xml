@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="RunCategoryNavigationFlow" project="TaskWorldLogin" tests="1" started="1" failures="0" errors="0" ignored="0">
+  <testsuite name="runner.RunCategoryNavigationFlow" time="59.438">
+    <testsuite name="Feature: TaskWorld Login Scenarios" time="59.438">
+      <testcase name="User creates task after login" classname="TaskWorld Login Scenarios" time="59.437">
+        <skipped>cucumber.api.PendingException: TODO: implement me&#13;
+	at stepdefinitions.TaskWorldHomePageSteps.the_user_creates_a_new_tasklist_in_the_project(TaskWorldHomePageSteps.java:98)&#13;
+	at ✽.The user creates a new tasklist in the project(features/TaskWorldHomePage.feature:9)&#13;
+&#13;
+</skipped>
+      </testcase>
+    </testsuite>
+  </testsuite>
+</testrun>

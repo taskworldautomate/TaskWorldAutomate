@@ -1,0 +1,16 @@
+package stepdefinitions;
+import java.util.HashMap;
+import java.util.List;
+import cucumber.api.Scenario;
+import cucumber.api.java.Before;
+
+public class Hooks {
+
+	public List<HashMap<String, String>> datamap;
+
+	@Before
+	public void beforeScenario(Scenario scenario) throws Throwable {
+
+	}
+
+}

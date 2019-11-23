@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="RunCategoryNavigationFlow" project="TaskWorldLogin" tests="1" started="1" failures="0" errors="1" ignored="0">
+  <testsuite name="runner.RunCategoryNavigationFlow" time="0.063">
+    <testsuite name="Feature: TaskWorld Login Scenarios" time="0.063">
+      <testcase name="User creates task after login" classname="TaskWorld Login Scenarios" time="0.063">
+        <error>cucumber.runtime.CucumberException: Failed to instantiate class stepdefinitions.TaskWorldHomePageSteps&#13;
+	at cucumber.runtime.java.DefaultJavaObjectFactory.cacheNewInstance(DefaultJavaObjectFactory.java:47)&#13;
+	at cucumber.runtime.java.DefaultJavaObjectFactory.getInstance(DefaultJavaObjectFactory.java:33)&#13;
+	at cucumber.runtime.java.JavaStepDefinition.execute(JavaStepDefinition.java:48)&#13;
+	at cucumber.runner.PickleStepDefinitionMatch.runStep(PickleStepDefinitionMatch.java:50)&#13;
+	at cucumber.runner.TestStep.executeStep(TestStep.java:63)&#13;
+	at cucumber.runner.TestStep.run(TestStep.java:49)&#13;
+	at cucumber.runner.PickleStepTestStep.run(PickleStepTestStep.java:43)&#13;
+	at cucumber.runner.TestCase.run(TestCase.java:44)&#13;
+	at cucumber.runner.Runner.runPickle(Runner.java:40)&#13;
+	at cucumber.runtime.junit.PickleRunners$NoStepDescriptions.run(PickleRunners.java:146)&#13;
+	at cucumber.runtime.junit.FeatureRunner.runChild(FeatureRunner.java:68)&#13;
+	at cucumber.runtime.junit.FeatureRunner.runChild(FeatureRunner.java:23)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:238)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:63)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:236)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:53)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:229)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:309)&#13;
+	at cucumber.runtime.junit.FeatureRunner.run(FeatureRunner.java:73)&#13;
+	at cucumber.api.junit.Cucumber.runChild(Cucumber.java:124)&#13;
+	at cucumber.api.junit.Cucumber.runChild(Cucumber.java:65)&#13;
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:238)&#13;
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:63)&#13;
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:236)&#13;
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:53)&#13;
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:229)&#13;
+	at cucumber.api.junit.Cucumber$1.evaluate(Cucumber.java:133)&#13;
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:309)&#13;
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)&#13;
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:538)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:760)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:460)&#13;
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:206)&#13;
+Caused by: java.lang.reflect.InvocationTargetException&#13;
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)&#13;
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)&#13;
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)&#13;
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)&#13;
+	at cucumber.runtime.java.DefaultJavaObjectFactory.cacheNewInstance(DefaultJavaObjectFactory.java:41)&#13;
+	... 33 more&#13;
+Caused by: java.lang.NullPointerException&#13;
+	at java.util.Objects.requireNonNull(Objects.java:203)&#13;
+	at org.openqa.selenium.support.ui.FluentWait.&lt;init&gt;(FluentWait.java:106)&#13;
+	at org.openqa.selenium.support.ui.WebDriverWait.&lt;init&gt;(WebDriverWait.java:85)&#13;
+	at org.openqa.selenium.support.ui.WebDriverWait.&lt;init&gt;(WebDriverWait.java:45)&#13;
+	at stepdefinitions.TaskWorldHomePageSteps.&lt;init&gt;(TaskWorldHomePageSteps.java:31)&#13;
+	... 38 more&#13;
+&#13;
+</error>
+      </testcase>
+    </testsuite>
+  </testsuite>
+</testrun>
